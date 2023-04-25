@@ -96,6 +96,10 @@ func (upstreamClient *UpstreamClient) GetById(id string) (*Upstream, error) {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	upstream := &Upstream{}
 	err := json.Unmarshal([]byte(body), upstream)
 	if err != nil {
@@ -118,6 +122,10 @@ func (upstreamClient *UpstreamClient) Create(upstreamRequest *UpstreamRequest) (
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	createdUpstream := &Upstream{}
@@ -148,6 +156,10 @@ func (upstreamClient *UpstreamClient) DeleteById(id string) error {
 		return fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	return nil
 }
 
@@ -160,6 +172,10 @@ func (upstreamClient *UpstreamClient) List() (*Upstreams, error) {
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	upstreams := &Upstreams{}
@@ -184,6 +200,10 @@ func (upstreamClient *UpstreamClient) UpdateById(id string, upstreamRequest *Ups
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	updatedUpstream := &Upstream{}

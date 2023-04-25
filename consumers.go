@@ -47,6 +47,10 @@ func (consumerClient *ConsumerClient) GetById(id string) (*Consumer, error) {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	consumer := &Consumer{}
 	err := json.Unmarshal([]byte(body), consumer)
 	if err != nil {
@@ -69,6 +73,10 @@ func (consumerClient *ConsumerClient) Create(consumerRequest *ConsumerRequest) (
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	createdConsumer := &Consumer{}
@@ -95,6 +103,10 @@ func (consumerClient *ConsumerClient) List() (*Consumers, error) {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	consumers := &Consumers{}
 	err := json.Unmarshal([]byte(body), consumers)
 	if err != nil {
@@ -119,6 +131,10 @@ func (consumerClient *ConsumerClient) DeleteById(id string) error {
 		return fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	return nil
 }
 
@@ -135,6 +151,10 @@ func (consumerClient *ConsumerClient) UpdateById(id string, consumerRequest *Con
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	updatedConsumer := &Consumer{}
@@ -159,6 +179,10 @@ func (consumerClient *ConsumerClient) CreatePluginConfig(consumerId string, plug
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	createdConsumerPluginConfig := &ConsumerPluginConfig{}
@@ -187,6 +211,10 @@ func (consumerClient *ConsumerClient) GetPluginConfig(consumerId string, pluginN
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	consumerPluginConfig := &ConsumerPluginConfig{}
 	err := json.Unmarshal([]byte(body), consumerPluginConfig)
 	if err != nil {
@@ -211,6 +239,10 @@ func (consumerClient *ConsumerClient) DeletePluginConfig(consumerId string, plug
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	return nil

@@ -37,6 +37,10 @@ func (snisClient *SnisClient) Create(snisRequest *SnisRequest) (*Sni, error) {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	sni := &Sni{}
 	err := json.Unmarshal([]byte(body), sni)
 	if err != nil {
@@ -59,6 +63,10 @@ func (snisClient *SnisClient) GetByName(name string) (*Sni, error) {
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	sni := &Sni{}
@@ -85,6 +93,10 @@ func (snisClient *SnisClient) List() (*Snis, error) {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	snis := &Snis{}
 	err := json.Unmarshal([]byte(body), snis)
 	if err != nil {
@@ -105,6 +117,10 @@ func (snisClient *SnisClient) DeleteByName(name string) error {
 		return fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	return nil
 }
 
@@ -117,6 +133,10 @@ func (snisClient *SnisClient) UpdateByName(name string, snisRequest *SnisRequest
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	updatedSni := &Sni{}

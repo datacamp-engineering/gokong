@@ -90,6 +90,10 @@ func (pluginClient *PluginClient) List(query *PluginQueryString) ([]*Plugin, err
 			return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 		}
 
+		if r.StatusCode >= 400 {
+			return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+		}
+
 		err := json.Unmarshal([]byte(body), data)
 		if err != nil {
 			return nil, fmt.Errorf("could not parse plugins list response, error: %v", err)
@@ -118,6 +122,10 @@ func (pluginClient *PluginClient) Create(pluginRequest *PluginRequest) (*Plugin,
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	createdPlugin := &Plugin{}
 	err := json.Unmarshal([]byte(body), createdPlugin)
 	if err != nil {
@@ -140,6 +148,10 @@ func (pluginClient *PluginClient) UpdateById(id string, pluginRequest *PluginReq
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	updatedPlugin := &Plugin{}
@@ -166,6 +178,10 @@ func (pluginClient *PluginClient) DeleteById(id string) error {
 		return fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	return nil
 }
 
@@ -177,6 +193,10 @@ func (pluginClient *PluginClient) GetByConsumerId(id string) (*Plugins, error) {
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	plugins := &Plugins{}
@@ -198,6 +218,10 @@ func (pluginClient *PluginClient) GetByRouteId(id string) (*Plugins, error) {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	plugins := &Plugins{}
 	err := json.Unmarshal([]byte(body), plugins)
 	if err != nil {
@@ -215,6 +239,10 @@ func (pluginClient *PluginClient) GetByServiceId(id string) (*Plugins, error) {
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	plugins := &Plugins{}
