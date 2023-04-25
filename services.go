@@ -117,6 +117,11 @@ func (serviceClient *ServiceClient) getService(endpoint string) (*Service, error
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	service := &Service{}
 	err := json.Unmarshal([]byte(body), service)
 	if err != nil {
@@ -151,6 +156,11 @@ func (serviceClient *ServiceClient) GetServices(query *ServiceQueryString) ([]*S
 
 		if r.StatusCode == 401 || r.StatusCode == 403 {
 			return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+		}
+
+		if r.StatusCode >= 400 {
+
+			return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 		}
 
 		err := json.Unmarshal([]byte(body), data)
@@ -192,6 +202,10 @@ func (serviceClient *ServiceClient) updateService(endpoint string, serviceReques
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	updatedService := &Service{}
 	err := json.Unmarshal([]byte(body), updatedService)
 	if err != nil {
@@ -217,6 +231,10 @@ func (serviceClient *ServiceClient) DeleteServiceById(id string) error {
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	return nil

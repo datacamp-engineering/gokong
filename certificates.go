@@ -38,6 +38,10 @@ func (certificateClient *CertificateClient) GetById(id string) (*Certificate, er
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	certificate := &Certificate{}
 	err := json.Unmarshal([]byte(body), certificate)
 	if err != nil {
@@ -60,6 +64,10 @@ func (certificateClient *CertificateClient) Create(certificateRequest *Certifica
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	createdCertificate := &Certificate{}
@@ -86,6 +94,10 @@ func (certificateClient *CertificateClient) DeleteById(id string) error {
 		return fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	return nil
 }
 
@@ -98,6 +110,10 @@ func (certificateClient *CertificateClient) List() (*Certificates, error) {
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	certificates := &Certificates{}
@@ -118,6 +134,10 @@ func (certificateClient *CertificateClient) UpdateById(id string, certificateReq
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	updatedCertificate := &Certificate{}

@@ -74,6 +74,11 @@ func (routeClient *RouteClient) GetById(id string) (*Route, error) {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode > 400 {
+
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	route := &Route{}
 	err := json.Unmarshal([]byte(body), route)
 	if err != nil {
@@ -95,6 +100,10 @@ func (routeClient *RouteClient) Create(routeRequest *RouteRequest) (*Route, erro
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	createdRoute := &Route{}
@@ -133,6 +142,10 @@ func (routeClient *RouteClient) List(query *RouteQueryString) ([]*Route, error) 
 			return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 		}
 
+		if r.StatusCode >= 400 {
+			return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+		}
+
 		err := json.Unmarshal([]byte(body), data)
 		if err != nil {
 			return nil, fmt.Errorf("could not parse route get response, error: %v", err)
@@ -168,6 +181,10 @@ func (routeClient *RouteClient) GetRoutesFromServiceId(id string) ([]*Route, err
 			return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 		}
 
+		if r.StatusCode >= 400 {
+			return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+		}
+
 		err := json.Unmarshal([]byte(body), data)
 		if err != nil {
 			return nil, fmt.Errorf("could not parse route get response, error: %v", err)
@@ -197,6 +214,10 @@ func (routeClient *RouteClient) UpdateById(id string, routeRequest *RouteRequest
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode >= 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	updatedRoute := &Route{}
 	err := json.Unmarshal([]byte(body), updatedRoute)
 	if err != nil {
@@ -222,6 +243,10 @@ func (routeClient *RouteClient) DeleteById(id string) error {
 
 	if r.StatusCode == 401 || r.StatusCode == 403 {
 		return fmt.Errorf("not authorised, message from kong: %s", body)
+	}
+
+	if r.StatusCode >= 400 {
+		return fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 	}
 
 	return nil

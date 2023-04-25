@@ -46,6 +46,10 @@ func (targetClient *TargetClient) CreateFromUpstreamId(id string, targetRequest 
 		return nil, fmt.Errorf("not authorised, message from kong: %s", body)
 	}
 
+	if r.StatusCode > 400 {
+		return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
+	}
+
 	createdTarget := &Target{}
 	err := json.Unmarshal([]byte(body), createdTarget)
 	if err != nil {
@@ -79,6 +83,10 @@ func (targetClient *TargetClient) GetTargetsFromUpstreamId(id string) ([]*Target
 
 		if r.StatusCode == 404 {
 			return nil, fmt.Errorf("non existent upstream: %s", id)
+		}
+
+		if r.StatusCode >= 400 {
+			return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 		}
 
 		err := json.Unmarshal([]byte(body), data)
@@ -178,6 +186,10 @@ func (targetClient *TargetClient) GetTargetsWithHealthFromUpstreamId(id string) 
 
 		if r.StatusCode == 404 {
 			return nil, fmt.Errorf("non existent upstream: %s", id)
+		}
+
+		if r.StatusCode >= 400 {
+			return nil, fmt.Errorf("unexpected response from kong. Status code %d, message: %s", r.StatusCode, body)
 		}
 
 		err := json.Unmarshal([]byte(body), data)
