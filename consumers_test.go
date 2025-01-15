@@ -288,7 +288,7 @@ func Test_ConsumersPluginConfig(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, plugin)
 
-	createdPluginConfig, err := client.Consumers().CreatePluginConfig(createdConsumer.Id, "jwt", "{\"key\": \"a36c3049b36249a3c9f8891cb127243c\"}")
+	createdPluginConfig, err := client.Consumers().CreatePluginConfig(createdConsumer.Id, "jwt", "{\"key\": \"a36c3049b36249a3c9f8891cb127243c\"}", nil)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, createdPluginConfig)
@@ -347,7 +347,7 @@ func Test_AllConsumerEndpointsShouldReturnErrorWhenRequestUnauthorised(t *testin
 	assert.Nil(t, updatedConsumer)
 	assert.NotNil(t, err)
 
-	createdPluginConfig, err := unauthorisedClient.Consumers().CreatePluginConfig(uuid.NewV4().String(), "jwt", "{\"key\": \"a36c3049b36249a3c9f8891cb127243c\"}")
+	createdPluginConfig, err := unauthorisedClient.Consumers().CreatePluginConfig(uuid.NewV4().String(), "jwt", "{\"key\": \"a36c3049b36249a3c9f8891cb127243c\"}", nil)
 	assert.Nil(t, createdPluginConfig)
 	assert.NotNil(t, err)
 
