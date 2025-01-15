@@ -17,6 +17,7 @@ type PluginRequest struct {
 	RunOn      string                 `json:"run_on,omitempty" yaml:"run_on,omitempty"`
 	Config     map[string]interface{} `json:"config,omitempty" yaml:"config,omitempty"`
 	Enabled    *bool                  `json:"enabled,omitempty" yaml:"enabled,omitempty"`
+	Tags       []*string              `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 type Plugin struct {
@@ -28,6 +29,7 @@ type Plugin struct {
 	RunOn      string                 `json:"run_on,omitempty" yaml:"run_on,omitempty"`
 	Config     map[string]interface{} `json:"config,omitempty" yaml:"config,omitempty"`
 	Enabled    bool                   `json:"enabled,omitempty" yaml:"enabled,omitempty"`
+	Tags       []*string              `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 type Plugins struct {

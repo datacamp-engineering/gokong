@@ -35,6 +35,7 @@ type UpstreamHealthCheckActive struct {
 	HttpsSni               *string          `json:"https_sni,omitempty" yaml:"https_sni,omitempty"`
 	Timeout                int              `json:"timeout,omitempty" yaml:"timeout,omitempty"`
 	Unhealthy              *ActiveUnhealthy `json:"unhealthy,omitempty" yaml:"unhealthy,omitempty"`
+	Tags                   []*string        `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 type ActiveHealthy struct {

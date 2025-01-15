@@ -30,6 +30,7 @@ func TestRoutes_GetById(t *testing.T) {
 		StripPath:    Bool(true),
 		PreserveHost: Bool(true),
 		Service:      ToId(*createdService.Id),
+		Tags:         StringSlice([]string{"foo", "bar"}),
 	}
 
 	createdRoute, err := client.Routes().Create(routeRequest)
@@ -73,6 +74,7 @@ func TestRoutes_CreateWithSourcesAndDestinations(t *testing.T) {
 		Sources:      IpPortSliceSlice([]IpPort{{Ip: String("192.168.1.1"), Port: Int(80)}, {Ip: String("192.168.1.2"), Port: Int(81)}}),
 		Destinations: IpPortSliceSlice([]IpPort{{Ip: String("172.10.1.1"), Port: Int(83)}, {Ip: String("172.10.1.2"), Port: nil}}),
 		Service:      ToId(*createdService.Id),
+		Tags:         StringSlice([]string{"foo", "bar"}),
 	}
 
 	createdRoute, err := client.Routes().Create(routeRequest)
@@ -115,6 +117,7 @@ func TestRoutes_List(t *testing.T) {
 		StripPath:    Bool(true),
 		PreserveHost: Bool(true),
 		Service:      ToId(*createdService.Id),
+		Tags:         StringSlice([]string{"foo", "bar"}),
 	}
 
 	for i := 0; i < 5; i++ {
