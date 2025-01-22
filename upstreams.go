@@ -19,6 +19,7 @@ type UpstreamRequest struct {
 	HashOnCookie       string               `json:"hash_on_cookie,omitempty" yaml:"hash_on_cookie,omitempty"`
 	HashOnCookiePath   string               `json:"hash_on_cookie_path,omitempty" yaml:"hash_on_cookie_path,omitempty"`
 	HealthChecks       *UpstreamHealthCheck `json:"healthchecks,omitempty" yaml:"healthchecks,omitempty"`
+	Tags               []*string            `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 type UpstreamHealthCheck struct {
@@ -35,6 +36,7 @@ type UpstreamHealthCheckActive struct {
 	HttpsSni               *string          `json:"https_sni,omitempty" yaml:"https_sni,omitempty"`
 	Timeout                int              `json:"timeout,omitempty" yaml:"timeout,omitempty"`
 	Unhealthy              *ActiveUnhealthy `json:"unhealthy,omitempty" yaml:"unhealthy,omitempty"`
+	Tags                   []*string        `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 type ActiveHealthy struct {

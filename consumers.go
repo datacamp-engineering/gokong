@@ -10,14 +10,16 @@ type ConsumerClient struct {
 }
 
 type ConsumerRequest struct {
-	Username string `json:"username,omitempty" yaml:"username,omitempty"`
-	CustomId string `json:"custom_id,omitempty" yaml:"custom_id,omitempty"`
+	Username string    `json:"username,omitempty" yaml:"username,omitempty"`
+	CustomId string    `json:"custom_id,omitempty" yaml:"custom_id,omitempty"`
+	Tags     []*string `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 type Consumer struct {
-	Id       string `json:"id,omitempty" yaml:"id,omitempty"`
-	CustomId string `json:"custom_id,omitempty" yaml:"custom_id,omitempty"`
-	Username string `json:"username,omitempty" yaml:"custom_id,omitempty"`
+	Id       string    `json:"id,omitempty" yaml:"id,omitempty"`
+	CustomId string    `json:"custom_id,omitempty" yaml:"custom_id,omitempty"`
+	Username string    `json:"username,omitempty" yaml:"custom_id,omitempty"`
+	Tags     []*string `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 type Consumers struct {
@@ -28,6 +30,7 @@ type Consumers struct {
 type ConsumerPluginConfig struct {
 	Id   string `json:"id,omitempty" yaml:"id,omitempty"`
 	Body string
+	Tags []*string `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 const ConsumersPath = "/consumers/"
@@ -170,9 +173,19 @@ func (consumerClient *ConsumerClient) UpdateById(id string, consumerRequest *Con
 	return updatedConsumer, nil
 }
 
-func (consumerClient *ConsumerClient) CreatePluginConfig(consumerId string, pluginName string, pluginConfig string) (*ConsumerPluginConfig, error) {
+func (consumerClient *ConsumerClient) CreatePluginConfig(consumerId string, pluginName string, pluginConfig string, tags []*string) (*ConsumerPluginConfig, error) {
+	requestBody := map[string]interface{}{
+		"config": pluginConfig,
+	}
 
-	r, body, errs := newPost(consumerClient.config, consumerClient.config.HostAddress+ConsumersPath+consumerId+"/"+pluginName).Send(pluginConfig).End()
+	// Add tags only if they are provided
+	if tags != nil {
+		requestBody["tags"] = tags
+	}
+
+	r, body, errs := newPost(consumerClient.config, consumerClient.config.HostAddress+ConsumersPath+consumerId+"/"+pluginName).
+		Send(requestBody).
+		End()
 	if errs != nil {
 		return nil, fmt.Errorf("could not configure plugin for consumer, error: %v", errs)
 	}
