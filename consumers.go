@@ -173,7 +173,7 @@ func (consumerClient *ConsumerClient) UpdateById(id string, consumerRequest *Con
 	return updatedConsumer, nil
 }
 
-func (consumerClient *ConsumerClient) CreatePluginConfig(consumerId string, pluginName string, pluginConfig string) (*ConsumerPluginConfig, error) {
+func (consumerClient *ConsumerClient) CreatePluginConfig(consumerId string, pluginName string, pluginConfig string, tags []*string) (*ConsumerPluginConfig, error) {
 	r, body, errs := newPost(consumerClient.config, consumerClient.config.HostAddress+ConsumersPath+consumerId+"/"+pluginName).Send(pluginConfig).End()
 	if errs != nil {
 		return nil, fmt.Errorf("could not configure plugin for consumer, error: %v", errs)
