@@ -174,18 +174,7 @@ func (consumerClient *ConsumerClient) UpdateById(id string, consumerRequest *Con
 }
 
 func (consumerClient *ConsumerClient) CreatePluginConfig(consumerId string, pluginName string, pluginConfig string, tags []*string) (*ConsumerPluginConfig, error) {
-	requestBody := map[string]interface{}{
-		"config": pluginConfig,
-	}
-
-	// Add tags only if they are provided
-	if tags != nil {
-		requestBody["tags"] = tags
-	}
-
-	r, body, errs := newPost(consumerClient.config, consumerClient.config.HostAddress+ConsumersPath+consumerId+"/"+pluginName).
-		Send(requestBody).
-		End()
+	r, body, errs := newPost(consumerClient.config, consumerClient.config.HostAddress+ConsumersPath+consumerId+"/"+pluginName).Send(pluginConfig).End()
 	if errs != nil {
 		return nil, fmt.Errorf("could not configure plugin for consumer, error: %v", errs)
 	}
