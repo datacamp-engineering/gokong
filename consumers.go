@@ -30,7 +30,6 @@ type Consumers struct {
 type ConsumerPluginConfig struct {
 	Id   string `json:"id,omitempty" yaml:"id,omitempty"`
 	Body string
-	Tags []*string `json:"tags,omitempty" yaml:"tags,omitempty"`
 }
 
 const ConsumersPath = "/consumers/"
